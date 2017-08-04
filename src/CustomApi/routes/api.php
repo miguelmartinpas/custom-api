@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 
+Use CustomApi\Middlewares\CustomQuery as CustomQueryMiddleware;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,4 +15,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/resource', 'Adapter@get');
+Route::get('/resource', 'Adapter@get')->middleware(CustomQueryMiddleware::class);;
