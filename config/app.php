@@ -177,6 +177,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //isolate source folder for my project
+        CustomApi\Providers\RouteServiceProvider::class,
+
     ],
 
     /*
