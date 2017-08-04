@@ -15,10 +15,10 @@ class Adapter extends BaseService {
     $this->client = new Client();
   }
 
-  public function get() {
+  public function get($query) {
     $response = $this->client->request('GET', $this->url, [
         'query' => [
-          'q' => 'deadpool'
+          'q' => $query
         ]
     ]);
 

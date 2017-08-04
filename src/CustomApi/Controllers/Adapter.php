@@ -3,6 +3,7 @@
 namespace CustomApi\Controllers;
 
 use \Illuminate\Routing\Controller as BaseController;
+use \Illuminate\Http\Request;
 
 use \App;
 
@@ -19,8 +20,8 @@ class Adapter extends BaseController {
       $this->adaterService = App::make('AdapterService');
   }
 
-  public function get() {
-    return $this->adaterService->get();
+  public function get(Request $request) {
+    return $this->adaterService->get($request->input('q'));
   }
 
 }
