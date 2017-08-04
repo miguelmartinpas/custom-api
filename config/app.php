@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         //isolate source folder for my project
+        CustomApi\Providers\SrcServiceProvider::class,
         CustomApi\Providers\RouteServiceProvider::class,
 
     ],

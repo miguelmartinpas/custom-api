@@ -4,16 +4,23 @@ namespace CustomApi\Controllers;
 
 use \Illuminate\Routing\Controller as BaseController;
 
-use \Illuminate\Http\Request;
-use \App\Http\Requests;
+use \App;
 
 class Adapter extends BaseController {
 
+  protected $adapterService;
+  /**
+   * Create a new controller instance.
+   *
+   * @param  UserRepository  $users
+   * @return void
+   */
+  public function __construct() {
+      $this->adaterService = App::make('AdapterService');
+  }
+
   public function get() {
-    return response()->json([
-    'message' => 'generate response from controller for custom JSON Api!',
-    'code' => '01'
-  ]);
+    return $this->adaterService->get();
   }
 
 }
