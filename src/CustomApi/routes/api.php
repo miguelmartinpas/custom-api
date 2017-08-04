@@ -13,9 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/resource', function (Request $request) {
-  return response()->json([
-    'message' => 'First execution of custom JSON Api!',
-    'code' => '00'
-  ]);
-});
+Route::get('/resource', 'Adapter@get');
