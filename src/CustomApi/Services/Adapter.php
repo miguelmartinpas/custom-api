@@ -16,6 +16,13 @@ class Adapter {
     $this->client = new Client();
   }
 
+  /** 
+    * Main method of service
+    * 
+    * @param string $query
+    *
+    * @return object response
+    */
   public function getResult($query) {
 
     $response = $this->searchValues($query);
@@ -32,7 +39,7 @@ class Adapter {
     * 
     * @param string $query
     *
-    * @return object response
+    * @return Array response
     */
   public function searchValues($query) {
 
