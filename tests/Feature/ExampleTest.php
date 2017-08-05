@@ -9,15 +9,29 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
-    {
-        $response = $this->get('/');
 
+    protected $prefix = '/custom-api';
+
+    public function testCallWithoutQParamShouldReturn400(){
+        $response = $this->get($this->prefix.'/resource');
+        $response->assertStatus(400);
+    }
+
+    public function testCallWithQParamShouldReturn200(){
+        $response = $this->get($this->prefix.'/resource?q=Deadpool');
         $response->assertStatus(200);
     }
+
+    public function testCallWithQParamShouldReturn200AndData(){
+        $response = $this->get($this->prefix.'/resource?q=Deadpool');
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['name' => 'Deadpool']);
+    }
+
+    public function testCallWithQParamShouldReturn200AndEmtyData(){
+        $response = $this->get($this->prefix.'/resource?q=asdfasdf');
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['error' => 'Search without results for "asdfasdf"']);
+    }
+
 }
