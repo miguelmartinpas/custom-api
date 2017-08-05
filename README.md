@@ -96,9 +96,9 @@ The purpose of this is that I want to isolate my source to improve the maintaina
 
 You will need php 5.6 to run it (Laravel 5.4)
 
-1.- upload this source with git clone https://github.com/miguelmartinpas/custom-api.git
-2.- run composer update
-3.- php artisan serve
+- 1.- upload this source with git clone https://github.com/miguelmartinpas/custom-api.git
+- 2.- run composer update
+- 3.- php artisan serve
 
 You can access to custo-api with
 
