@@ -49,9 +49,10 @@ class Adapter {
       if (Cache::has($query)) {
         $response = array(Cache::get($query));
       } else {
-        $response = json_decode($this->client->request('GET', $this->url, [
-          'query' => ['q' => $query]
-        ])->getBody());
+        $response = json_decode($this->client->get($this->url, [
+            'query' => ['q' => $query]
+          ])->getBody()
+        );
       }
     } catch (ClientException $e) {
       $response = null;
@@ -107,6 +108,14 @@ class Adapter {
 
     return response()->json($content, $code, $header);
   
+  }
+
+  /** 
+    * Method to clear cache  
+    * 
+    */
+  public function forceClearCache() {
+    Cache::flush();
   }
 
 }

@@ -55,13 +55,15 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ### Structure
 
-I have isolated my source in src folder. for that I have add a provider in config/app.php
+I have isolated my source in src folder. For that I have add a provider in config/app.php
 
 ```
 //isolate source folder for my project
 CustomApi\Providers\SrcServiceProvider::class,
 CustomApi\Providers\RouteServiceProvider::class,
 ```
+
+The purpose of this is that I want to isolate my source to improve the maintainability (we can move it to other Laravel project easily)
 
 ```
 |--src
@@ -75,8 +77,6 @@ tests
   |-- Unit
 ```
 
-The purpose of this is that I want to isolate my source to improve the maintainability (we can move it to other Laravel project easily)
-
 ### Structure summary
 
 - Providers: I have two; RouteProviders to create new routes and SrcProvider to inject services and middlewares
@@ -85,7 +85,23 @@ The purpose of this is that I want to isolate my source to improve the maintaina
 
 - Controllers: I have created a controller that is called from api.php and call to Adapter service
 
-- Service: I have created Adapter service where you can find all the logic of custom api
+- Service: I have created Adapter service where you can find all the logic of custom api. This Service have 4 methods
+
+  - getResult
+
+    Main method that it will use the logic of the others methods.
+
+  - searchValues
+
+    This method should get data from external API. If query exists in cache store it won't call external api.
+
+  - parseResponse
+
+    This method will parse searched values to get the element that will be equals to query. This method should store all results show in an internal cache as well.
+
+  - buildResponse
+
+    Build respone json.
 
 - Middleware: I have created a middlware to avoid call with q parameter. In summary check parameters before to apply logic. If parameters are not correct will return 400 HTTP error.
 

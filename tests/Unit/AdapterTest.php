@@ -5,10 +5,12 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 use CustomApi\Services\Adapter;
 
 class AdapterTest extends TestCase {
+
+    protected $validQuery = "Superman";
+    protected $invalidQuery = "qwertyqwerty";
 
     public function testSearchValuesWithNullParameter(){
         $adapter = new Adapter();
@@ -18,14 +20,15 @@ class AdapterTest extends TestCase {
 
     public function testSearchValuesWithInvalidParameter(){
         $adapter = new Adapter();
-        $values = $adapter->searchValues('asdfasdf');
+        $values = $adapter->searchValues($this->invalidQuery);
         $this->assertEquals($values, []);
         return $values;
     }
 
     public function testSearchValuesWithValidParameter(){
         $adapter = new Adapter();
-        $values = $adapter->searchValues('Superman');
+        $adapter->forceClearCache();
+        $values = $adapter->searchValues($this->validQuery);
         $this->assertEquals(count($values), 10);
         return $values;
     }
@@ -36,7 +39,7 @@ class AdapterTest extends TestCase {
     public function testParseResponseWithValidParameter(){
         $adapter = new Adapter();
         $groupOfValues = func_get_args();
-        $parsedValues = $adapter->parseResponse($groupOfValues[0], 'Superman');
+        $parsedValues = $adapter->parseResponse($groupOfValues[0], $this->validQuery);
         $this->assertEquals(count($parsedValues), 1);
         return $parsedValues;
     }
@@ -47,14 +50,14 @@ class AdapterTest extends TestCase {
     public function testParseResponseWithInValidParameter(){
         $adapter = new Adapter();
         $groupOfValues = func_get_args();
-        $parsedValues = $adapter->parseResponse($groupOfValues[0], 'qwerty');
+        $parsedValues = $adapter->parseResponse($groupOfValues[0], $this->invalidQuery);
         $this->assertEquals(count($parsedValues), 0);
         return $parsedValues;
     }
 
     public function testParseResponseWithInValidParameterEmptyArray(){
         $adapter = new Adapter();
-        $parsedValues = $adapter->parseResponse([], 'qwerty');
+        $parsedValues = $adapter->parseResponse([], $this->invalidQuery);
         $this->assertEquals(count($parsedValues), 0);
         return $parsedValues;
     }
