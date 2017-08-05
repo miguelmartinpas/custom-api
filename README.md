@@ -118,12 +118,32 @@ You will need php 5.6 to run it (Laravel 5.4)
 
 You can access to custo-api with
 
+```
 localhost:8000/custom-api/resourse
+```
 
-and you need q param to get results
+You need q param to get results. Example of valid url:
 
-
-Example of valid url:
-
+```
 localhost:8000/custom-api/resourse?q=Superman
+```
 
+To run UT yu should use 
+
+```
+./vendor/phpunit/phpunit/phpunit
+```
+
+The current output is:
+
+```
+PHPUnit 5.7.21 by Sebastian Bergmann and contributors.
+
+..........                                                        10 / 10 (100%)
+
+Time: 4.14 seconds, Memory: 21.00MB
+
+OK (10 tests, 12 assertions)
+
+Generating code coverage report in HTML format ... done
+```
