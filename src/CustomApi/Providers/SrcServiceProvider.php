@@ -5,7 +5,7 @@ namespace CustomApi\Providers;
 use Illuminate\Support\ServiceProvider;
 
 use CustomApi\Services\Adapter as AdapterService;
-use CustomApi\Middlewares\CustomQuery as CustomQueryMiddleware;
+use CustomApi\Middlewares\CustomQueryFilters as CustomQueryFiltersMiddleware;
 
 class SrcServiceProvider extends ServiceProvider {
 
@@ -17,8 +17,8 @@ class SrcServiceProvider extends ServiceProvider {
     public function register() {
 
       // Middlewares
-      $this->app->singleton('CustomQueryMiddleware', function($app){
-        return new CustomQueryMiddleware($app);
+      $this->app->singleton('CustomQueryFiltersMiddleware', function($app){
+        return new CustomQueryFiltersMiddleware($app);
       });
 
       // Services

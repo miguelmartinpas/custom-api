@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 
-Use CustomApi\Middlewares\CustomQuery as CustomQueryMiddleware;
+Use CustomApi\Middlewares\CustomQueryFilters as CustomQueryFiltersMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +15,4 @@ Use CustomApi\Middlewares\CustomQuery as CustomQueryMiddleware;
 |
 */
 
-Route::get('/resource', 'Adapter@get')->middleware(CustomQueryMiddleware::class);;
+Route::get('/resource', 'Adapter@get')->middleware(CustomQueryFiltersMiddleware::class);;
