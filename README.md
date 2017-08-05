@@ -51,11 +51,11 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
 
-## Implementation
+## Implementation of Custom API
 
 ### Structure
 
-I have isolate my source in src folder. for that I have add a provider in config/app.php
+I have isolated my source in src folder. for that I have add a provider in config/app.php
 
 ```
 //isolate source folder for my project
@@ -83,18 +83,18 @@ The purpose of this is that I want to isolate my source to improve the maintaina
 
 - routes: file with route for custom api
 
-- Controllers: I have create a controller that is called from api.php and call to Adapter service
+- Controllers: I have created a controller that is called from api.php and call to Adapter service
 
-- Service: I have created Adater service wheer you can find all the logic of custom api
+- Service: I have created Adapter service where you can find all the logic of custom api
 
-- Middleware: I have create a middlware to avoid call with q parameter. In summary check parameter in before to apply logic. If parameters are not correct will return 400 HTTP error.
+- Middleware: I have created a middlware to avoid call with q parameter. In summary check parameters before to apply logic. If parameters are not correct will return 400 HTTP error.
 
-- test: I have used feature and app UT.
+- test: I have used feature and app UT and I put config to generate coverage.
 
 
 ### Run App
 
-You will need php 5.6 to run it.
+You will need php 5.6 to run it (Laravel 5.4)
 
 1.- upload this source with git clone https://github.com/miguelmartinpas/custom-api.git
 2.- run composer update
@@ -104,7 +104,10 @@ You can access to custo-api with
 
 localhost:8000/custom-api/resourse
 
-and you nedd q param to get results
+and you need q param to get results
+
+
+Example of valid url:
 
 localhost:8000/custom-api/resourse?q=Superman
 
