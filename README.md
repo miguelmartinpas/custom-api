@@ -32,25 +32,33 @@ tests
 
 - routes: file with route for custom api
 
-- Controllers: I have created a controller that is called from api.php and call to Adapter service
+- Controllers: I have created a controller that is called from api.php and call ShowAdapter service
 
-- Service: I have created Adapter service where you can find all the logic of custom api. This Service have 4 methods
+- Service: I have created ShowAdapterService where you can find all the logic of custom api. This Service have: 
 
-  - getResult
+  - query
+    Set query parameter and return the its class instance.
+  
+  - search
+    Main method that it will use the logic of the others methods or used a Cache. it will return its class instance as well.
+    
+  - shows
+    It will return a search collection.
 
-    Main method that it will use the logic of the others methods.
+  - response
+    It will build a response json from a show collection 
 
-  - searchValues
+  - searchShows
 
-    This method should get data from external API. If query exists in cache store it won't call external api.
+    This method should return a collection with data from external API.
 
-  - parseResponse
+  - filterShows
 
-    This method will parse searched values to get the element that will be equals to query. This method should store all results show in an internal cache as well.
+    This method will return collection with parsed shows that contains the query value.
 
-  - buildResponse
+  - parsedShows
 
-    Build respone json.
+    It will return a collection with the new format for each show
 
 - Middleware: I have created a middlware to avoid call with q parameter. In summary check parameters before to apply logic. If parameters are not correct will return 400 HTTP error.
 
@@ -68,13 +76,13 @@ You will need php 5.6 to run it (Laravel 5.4)
 You can access to custo-api with
 
 ```
-localhost:8000/custom-api/resourse
+localhost:8000/custom-api/search
 ```
 
 You need q param to get results. Example of valid url:
 
 ```
-localhost:8000/custom-api/resourse?q=Superman
+localhost:8000/custom-api/search?q=Superman
 ```
 
 To run UT yu should use 
@@ -86,13 +94,14 @@ To run UT yu should use
 The current output is:
 
 ```
+> ./vendor/phpunit/phpunit/phpunit                                                               
 PHPUnit 5.7.21 by Sebastian Bergmann and contributors.
 
-..........                                                        10 / 10 (100%)
+............                                                      12 / 12 (100%)
 
-Time: 4.14 seconds, Memory: 21.00MB
+Time: 5.63 seconds, Memory: 20.75MB
 
-OK (10 tests, 12 assertions)
+OK (12 tests, 18 assertions)
 
 Generating code coverage report in HTML format ... done
 ```
