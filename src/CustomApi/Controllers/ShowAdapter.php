@@ -7,9 +7,9 @@ use \Illuminate\Http\Request;
 
 use \App;
 
-class Adapter extends BaseController {
+class ShowAdapter extends BaseController {
 
-  protected $adapterService;
+  protected $showAdapterService;
 
   /**
    * Create a new controller instance.
@@ -18,7 +18,7 @@ class Adapter extends BaseController {
    * @return void
    */
   public function __construct() {
-      $this->adaterService = App::make('AdapterService');
+      $this->showAdapterService = App::make('ShowAdapterService');
   }
 
   /**
@@ -28,7 +28,7 @@ class Adapter extends BaseController {
    * @return json response
    */
   public function get(Request $request) {
-    return $this->adaterService->getResult($request->input('q'));
+    return $this->showAdapterService->getResults($request->input('q'));
   }
 
 }

@@ -18,7 +18,7 @@ class CustomQueryFilters {
   public function handle($request, Closure $next) {
 
     if ($request->input('q') === null) {
-      return response()->json(['errors' => 'q attribute is mandatory'], Response::HTTP_BAD_REQUEST);
+      return response()->json(['errors' => 'q param is mandatory'], Response::HTTP_BAD_REQUEST);
     }
 
     return $next($request);

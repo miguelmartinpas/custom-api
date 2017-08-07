@@ -4,7 +4,7 @@ namespace CustomApi\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-use CustomApi\Services\Adapter as AdapterService;
+use CustomApi\Services\ShowAdapter as ShowAdapterService;
 use CustomApi\Middlewares\CustomQueryFilters as CustomQueryFiltersMiddleware;
 
 class SrcServiceProvider extends ServiceProvider {
@@ -22,8 +22,8 @@ class SrcServiceProvider extends ServiceProvider {
       });
 
       // Services
-      $this->app->singleton('AdapterService', function($app) {
-        return new AdapterService();
+      $this->app->singleton('ShowAdapterService', function($app) {
+        return new ShowAdapterService();
       });
 
     }

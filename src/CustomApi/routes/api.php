@@ -15,4 +15,4 @@ Use CustomApi\Middlewares\CustomQueryFilters as CustomQueryFiltersMiddleware;
 |
 */
 
-Route::get('/resource', 'Adapter@get')->middleware(CustomQueryFiltersMiddleware::class);;
+Route::get('/search', 'ShowAdapter@get')->middleware(CustomQueryFiltersMiddleware::class);;
