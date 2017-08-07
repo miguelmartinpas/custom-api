@@ -5,6 +5,7 @@ namespace CustomApi\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Response;
 
 class ShowAdapter {
 
@@ -12,41 +13,69 @@ class ShowAdapter {
   protected $client;
   protected $query;
   protected $expireAt = 30;
+  protected $shows = null;
 
   public function __construct(){
     $this->client = new Client();
   }
 
   /** 
-    * Main method of service. It set query atribute and search and process query serach
-    * Logic will be skipped if Cache has the query storaged
+    * Main method will set query and return the current class
     * 
     * @param String $query
     *
-    * @return Illuminate\Http\Response response
+    * @return CustomApi\Services\ShowAdapter
     */
-  public function search($query) {
-
+  public function query($query) {
     $this->query = $query;
+    return $this;
+  }
 
-    $parsedShows = null;
+  /** 
+    * Main method of service. 
+    * It should search and process results afterwards it will storage the parsed shows on Cache
+    * Logic will be skipped if Cache has the query storaged
+    *
+    * @return CustomApi\Services\ShowAdapter
+    */
+  public function search() {
 
     if (Cache::has($this->query)){
 
-      $parsedShows = Cache::get($this->query);
+      $this->shows = Cache::get($this->query);
     
     } else {
 
-      $shows = $this->searchShows();
+      $searchedShows = $this->searchShows();
 
-      $filteredShows = $this->filterShows($shows);
+      $filteredShows = $this->filterShows($searchedShows);
 
-      $parsedShows = $this->parsedShows($filteredShows);
+      $this->shows = $this->parsedShows($filteredShows);
+
+      Cache::put($this->query, $this->shows, $this->expireAt);
 
     }
 
-    return $this->buildResponse(200, json_decode($parsedShows->toJson()));
+    return $this;
 
+  }
+
+  /** 
+    * Return show collection
+    * 
+    * @return Illuminate\Support\Collection
+    */
+  public function shows() {
+    return $this->shows ? $this->shows : collect([]);
+  }
+
+  /** 
+    * Return a response object with the shows storaged
+    * 
+    * @return \Symfony\Component\HttpFoundation\Response
+    */
+  public function response() {
+    return response()->json(json_decode($this->shows()->toJson()), Response::HTTP_OK);
   }
 
   /** 
@@ -54,7 +83,7 @@ class ShowAdapter {
     *
     * @return Illuminate\Support\Collection $filteredShows
     */
-  public function searchShows() {
+  protected function searchShows() {
     
     $shows = null;
     
@@ -78,63 +107,30 @@ class ShowAdapter {
     *
     * @return Illuminate\Support\Collection $filteredShows
     */
-  public function filterShows($shows) {
+  protected function filterShows($shows) {
 
-    $filteredShows = null;
-
-    try {
-      $filteredShows = $shows->filter(function ($show) {
-        return strstr($show->show->name, $this->query);
-      });
-    } catch (Exception $e) {
-      $filteredShows = collect([]);;
-    }
-
-    return $filteredShows;
+    return $shows->filter(function ($show) {
+      return strstr($show->show->name, $this->query);
+    });
   
   }
 
   /** 
     * Parse shows to get a correct output for our API
-    * It will storage processed data in Cache
     * 
     * @param Illuminate\Support\Collection $shows
     *
     * @return Illuminate\Support\Collection $parsedShows
     */
-  public function parsedShows($shows) {
+  protected function parsedShows($shows) {
 
-    $parsedShows = null;
+    return $shows->map(function ($show) {
+      return (object) array(
+        'name' => $show->show->name,
+        'score' => $show->score
+      );
+    });
 
-    try {
-      $parsedShows = $shows->map(function ($show) {
-        return array(
-          'name' => $show->show->name,
-          'score' => $show->score
-        );
-      });
-      Cache::put($this->query, $parsedShows, $this->expireAt);
-    } catch (Exception $e) {
-      $parsedShows = collect([]);;
-    }
-
-    return $parsedShows;
-
-  }
-
-  /** 
-    * Build the Response Object  
-    * 
-    * @param int   $code
-    * @param mixed $content
-    * @param array $header
-    * 
-    * @return \Symfony\Component\HttpFoundation\Response
-    */
-  public function buildResponse($code = null, $content = null, $header = []) {
-
-    return response()->json($content, $code, $header);
-  
   }
 
 }

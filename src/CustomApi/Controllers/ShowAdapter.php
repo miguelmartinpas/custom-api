@@ -28,7 +28,7 @@ class ShowAdapter extends BaseController {
    * @return json response
    */
   public function get(Request $request) {
-    return $this->showAdapterService->search($request->input('q'));
+    return $this->showAdapterService->query($request->input('q'))->search()->response();
   }
 
 }

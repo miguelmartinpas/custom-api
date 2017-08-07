@@ -31,7 +31,7 @@ class CustomApiTest extends TestCase {
     public function testCallWithQParamShouldReturn200AndEmtyData(){
         $response = $this->get($this->prefix.$this->route.'?q=qwertyqwerty');
         $response->assertStatus(200);
-        $response->assertJsonFragment(['error' => 'Search without results for "qwertyqwerty"']);
+        $response->assertJson([]);
     }
 
 }
