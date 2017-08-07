@@ -4,33 +4,46 @@ namespace CustomApi\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Cache;
 
 class ShowAdapter {
 
   protected $url = "http://api.tvmaze.com/search/shows";
   protected $client;
   protected $query;
+  protected $expireAt = 30;
 
   public function __construct(){
     $this->client = new Client();
   }
 
   /** 
-    * Main method of service
+    * Main method of service. It set query atribute and search and process query serach
+    * Logic will be skipped if Cache has the query storaged
     * 
-    * @param string $query
+    * @param String $query
     *
-    * @return object response
+    * @return Illuminate\Http\Response response
     */
-  public function getResults($query) {
+  public function search($query) {
 
     $this->query = $query;
 
-    $shows = $this->searchShows();
+    $parsedShows = null;
 
-    $filteredShows = $this->filterShows($shows);
+    if (Cache::has($this->query)){
 
-    $parsedShows = $this->parsedShows($filteredShows);
+      $parsedShows = Cache::get($this->query);
+    
+    } else {
+
+      $shows = $this->searchShows();
+
+      $filteredShows = $this->filterShows($shows);
+
+      $parsedShows = $this->parsedShows($filteredShows);
+
+    }
 
     return $this->buildResponse(200, json_decode($parsedShows->toJson()));
 
@@ -38,8 +51,6 @@ class ShowAdapter {
 
   /** 
     * Build and run call to external service a process data in a collection
-    * 
-    * @param string $query
     *
     * @return Illuminate\Support\Collection $filteredShows
     */
@@ -76,7 +87,7 @@ class ShowAdapter {
         return strstr($show->show->name, $this->query);
       });
     } catch (Exception $e) {
-      $filteredShows = [];
+      $filteredShows = collect([]);;
     }
 
     return $filteredShows;
@@ -85,6 +96,7 @@ class ShowAdapter {
 
   /** 
     * Parse shows to get a correct output for our API
+    * It will storage processed data in Cache
     * 
     * @param Illuminate\Support\Collection $shows
     *
@@ -101,8 +113,9 @@ class ShowAdapter {
           'score' => $show->score
         );
       });
+      Cache::put($this->query, $parsedShows, $this->expireAt);
     } catch (Exception $e) {
-      $parsedShows = [];
+      $parsedShows = collect([]);;
     }
 
     return $parsedShows;
