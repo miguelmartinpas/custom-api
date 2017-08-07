@@ -37,15 +37,19 @@ tests
 - Service: I have created ShowAdapterService where you can find all the logic of custom api. This Service have: 
 
   - query
+
     Set query parameter and return the its class instance.
   
   - search
+
     Main method that it will use the logic of the others methods or used a Cache. it will return its class instance as well.
     
   - shows
+
     It will return a search collection.
 
   - response
+  
     It will build a response json from a show collection 
 
   - searchShows
